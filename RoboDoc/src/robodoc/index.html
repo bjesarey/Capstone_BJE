@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RoboDoc</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgb(6, 173, 189);
+        }
+        #chat {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background-color: white;
+        }
+        .user { color: blue; }
+        .bot { color: green; }
+
+        input {
+            width: 80%;
+            padding: 10px;
+        }
+        button {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align: center;"> RoboDoc: The AI Health Chatbot</h2>
+
+<div id="chat"></div>
+
+<input type="text" id="input" placeholder="How are you feeling today?" />
+<button onclick="sendMessage()">Send</button>
+<p>Note: RoboDoc is no substitute for a proper medical diagnosis.</p>
+
+<script>
+async function sendMessage() {
+    const input = document.getElementById("input");
+    const chat = document.getElementById("chat");
+
+    const message = input.value;
+    if (!message) return;
+
+    // Show user message
+    chat.innerHTML += `<div class="user"><b>You:</b> ${message}</div>`;
+    input.value = "";
+     // Create loading message
+    const loadingMessage = document.createElement("div");
+    loadingMessage.className = "bot";
+    loadingMessage.innerHTML = "RoboDoc is analyzing. Please wait patiently.";
+    chat.appendChild(loadingMessage);
+
+
+    // Send to backend
+    const response = await fetch("http://127.0.0.1:5000/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ symptoms: message })
+    });
+
+    const data = await response.json();
+    
+    // Remove loading message
+    loadingMessage.remove();
+
+    // Show bot response
+    chat.innerHTML += `<div class="bot"><b>RoboDoc:</b> ${data.response}</div>`;
+
+    chat.scrollTop = chat.scrollHeight;
+    
+}
+</script>
+
+</body>
+</html>

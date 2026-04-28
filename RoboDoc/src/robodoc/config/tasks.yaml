@@ -1,0 +1,36 @@
+analyze_symptoms:
+  description: >
+    The user has reported the following symptoms:
+
+    {symptoms}
+
+    Analyze these symptoms and determine possible illnesses
+    that could cause them. Consider common medical conditions.
+
+  expected_output: >
+    A list of possible medical conditions that match the symptoms
+    along with short explanations.
+
+  agent: symptom_analyzer
+
+
+diagnose:
+  description: >
+    Using the symptom analysis, determine the most likely cause
+    of the user's symptoms.
+
+    Symptoms:
+    {symptoms}
+
+    Provide:
+    - Most likely condition
+    - Other possible conditions
+    - Whether medical attention is recommended
+
+  expected_output: >
+    A short conversational explanation of the likely illness
+    and recommended next steps.
+    Always include a disclaimer that the result is not a medical diagnosis
+    and recommend consulting a healthcare professional.
+
+  agent: diagnosis_specialist
